@@ -1,32 +1,42 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
 function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handle form submission
     axios
       .post("http://localhost:3001/register", {
         name,
         email,
         password,
       })
-      .then((result) => console.log(result))
+      .then((result) => {
+        console.log(result);
+        navigate("/login");
+      })
       .catch((err) => console.log(err));
   };
   return (
     <>
       <Container>
-        <Card className="mt-3 w-50 mx-auto">
+        {/* <Row className="justify-content-center">
+          <Col xs={12} md={6}> */}
+        <Card
+          className="mt-5 mx-auto"
+          style={{ maxWidth: "100%", width: "400px" }}
+        >
           <Card.Body>
             <Card.Title>Register</Card.Title>
             <Form onSubmit={handleSubmit}>
@@ -66,9 +76,11 @@ function Signup() {
             </Form>
             <br />
             <p>Already have an Account</p>
-            <Link to="/Login">Login</Link>
+            <Link to="/login">Login</Link>
           </Card.Body>
         </Card>
+        {/* </Col>
+        </Row> */}
       </Container>
     </>
   );

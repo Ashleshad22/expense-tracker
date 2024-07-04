@@ -8,7 +8,7 @@ app.use(express.json()); // parses incoming requests with JSON payloads.......tr
 app.use(cors()); // allows cross-origin resource sharing
 
 mongoose.connect(
-  "mongodb+srv://ashleshad22:password@cluster0.wsshtyw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  "mongodb://127.0.0.1:27017/user"
 );
 
 app.listen(3001, () => {
