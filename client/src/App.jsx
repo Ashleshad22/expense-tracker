@@ -1,11 +1,16 @@
-import { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Signup from "./Signup.jsx";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "./Login.jsx";
 
 function App() {
   return (
     <>
-      <Signup />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
