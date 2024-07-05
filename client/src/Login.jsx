@@ -1,15 +1,18 @@
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const message = location.state?.message;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,10 +23,18 @@ function Login() {
       })
       .then((result) => {
         console.log(result);
-        navigate("/");
+        if (result.data === "Success") {
+          navigate("/home");
+        } else if (result.data === "No record found") {
+          navigate("/register", { state: { message: "User not registered" } });
+        } else if (result.data === "The password is incorrect") {
+          setPassword("");
+          setErrorMessage("The password is incorrect");
+        }
       })
       .catch((err) => console.log(err));
   };
+
   return (
     <Container>
       <Card
@@ -31,6 +42,17 @@ function Login() {
         style={{ maxWidth: "100%", width: "400px" }}
       >
         <Card.Body>
+          {message && (
+            <p
+              style={{
+                color: message === "User already registered" ? "red" : "green",
+                fontSize: "1.1em",
+                fontWeight: "bold",
+              }}
+            >
+              {message}
+            </p>
+          )}
           <Card.Title>Login</Card.Title>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -49,9 +71,21 @@ function Login() {
                 type="password"
                 placeholder="Password"
                 required
-                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrorMessage(""); // Clear error message when user starts typing
+                }}
               />
             </Form.Group>
+
+            {errorMessage && (
+              <p
+                style={{ color: "red", fontSize: "1.1em", fontWeight: "bold" }}
+              >
+                {errorMessage}
+              </p>
+            )}
 
             <Button variant="primary" type="submit">
               Login
