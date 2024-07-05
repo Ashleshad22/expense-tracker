@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 
@@ -25,7 +25,24 @@ function Login() {
       .then((result) => {
         console.log(result);
         if (result.data === "Success") {
-          navigate("/home");
+          const userData = JSON.parse(result.config.data);
+          const userEmail = userData.email;
+          console.log(userEmail);
+
+          axios
+            .get(
+              `http://localhost:3001/getUserDetails?email=${encodeURIComponent(
+                userEmail
+              )}`
+            )
+            .then((response) => {
+              const userName = response.data.name;
+              console.log(userName);
+              navigate(`/home?name=${encodeURIComponent(userName)}`, {
+                state: { name: userName },
+              });
+            })
+            .catch((err) => console.log(err));
         } else if (result.data === "No record found") {
           navigate("/register", { state: { message: "User not registered" } });
         } else if (result.data === "The password is incorrect") {

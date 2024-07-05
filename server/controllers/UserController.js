@@ -31,9 +31,20 @@ const registerController = async (req, res) => {
 };
 
 const dataController = async (req, res) => {
-  UserModel.find()
-    .then((users) => res.json(users))
-    .catch((err) => res.json(err));
+  const email = req.query.email;
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ name: user.name, email: user.email });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 module.exports = { loginController, registerController, dataController };

@@ -1,16 +1,11 @@
 import React, { useEffect } from "react";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 function Home() {
-  // const [users, setUsers] = useState([]);
+  const location = useLocation(); // Get current location
+  const name = location.state?.name; // Get user's name from state
 
-  // useEffect(() => {
-  //   // Code to run on component mount
-  //   axios
-  //     .get("http://localhost:3001/getUsers")
-  //     .then((users) => setUsers(users.data));
-  // }, []);
-  return <h1>Welcome </h1>;
+  return <h1>Welcome {name}</h1>;
 }
 
 export default Home;
