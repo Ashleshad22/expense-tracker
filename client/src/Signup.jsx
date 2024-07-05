@@ -2,11 +2,12 @@ import { Button, Card, Container, Form, Spinner } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./App.css";
 
 function Signup() {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showMessage, setShowMessage] = useState(true);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); // State for loading spinner
@@ -39,7 +40,7 @@ function Signup() {
           navigate("/login", { state: { message: "User already registered" } });
         } else {
           navigate("/login", {
-            state: { message: "Registeration Successful" },
+            state: { message: "Registeration Successful \nPlease Login" },
           });
         }
       })
@@ -52,13 +53,18 @@ function Signup() {
     <>
       <Container>
         <Card
-          className="mt-5 mx-auto"
+          className="mt-5"
           style={{ maxWidth: "100%", width: "400px" }}
         >
           <Card.Body>
             {message && showMessage && (
               <p
-                style={{ color: "red", fontSize: "1.1em", fontWeight: "bold" }}
+                style={{
+                  color: "red",
+                  fontSize: "1.1em",
+                  fontWeight: "bold",
+                  whiteSpace: "pre-line",
+                }}
               >
                 {message}
               </p>
@@ -95,8 +101,8 @@ function Signup() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Submit
+              <Button variant="primary" type="submit" disabled={loading}>
+                {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
               </Button>
             </Form>
             <br />

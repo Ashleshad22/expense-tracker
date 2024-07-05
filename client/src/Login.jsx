@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import "./App.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -48,6 +49,7 @@ function Login() {
                 color: message === "User already registered" ? "red" : "green",
                 fontSize: "1.1em",
                 fontWeight: "bold",
+                whiteSpace: "pre-line",
               }}
             >
               {message}
@@ -81,7 +83,12 @@ function Login() {
 
             {errorMessage && (
               <p
-                style={{ color: "red", fontSize: "1.1em", fontWeight: "bold" }}
+                style={{
+                  color: "red",
+                  fontSize: "1.1em",
+                  fontWeight: "bold",
+                  whiteSpace: "pre-line",
+                }}
               >
                 {errorMessage}
               </p>
