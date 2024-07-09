@@ -35,9 +35,13 @@ function Signup() {
       })
       .then((result) => {
         console.log(result);
+        const id = result.data._id;
+
         setLoading(false); // Hide spinner
         if (result.data === "User already registered") {
-          navigate("/login", { state: { message: "User already registered" } });
+          navigate("/login", {
+            state: { message: "User already registered", id: id },
+          });
         } else {
           navigate("/login", {
             state: { message: "Registeration Successful \nPlease Login" },
@@ -52,10 +56,7 @@ function Signup() {
   return (
     <>
       <Container>
-        <Card
-          className="mt-5"
-          style={{ maxWidth: "100%", width: "400px" }}
-        >
+        <Card className="mt-5" style={{ maxWidth: "100%", width: "400px" }}>
           <Card.Body>
             {message && showMessage && (
               <p

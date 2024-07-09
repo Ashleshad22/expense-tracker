@@ -1,4 +1,5 @@
 const UserModel = require("../models/UserModel.js"); // import the user model
+const FinanceRecordModel = require("../models/FinanceRecordModel.js"); // import the finance record model
 
 // login callback
 const loginController = async (req, res) => {
@@ -6,7 +7,7 @@ const loginController = async (req, res) => {
   UserModel.findOne({ email: email }).then((user) => {
     if (user) {
       if (user.password === password) {
-        res.json("Success");
+        res.json({ message: "Success", id: user._id });
       } else {
         res.json("The password is incorrect");
       }
@@ -41,10 +42,27 @@ const dataController = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    res.json({ name: user.name, email: user.email });
+    res.json({ id: user._id, name: user.name, email: user.email });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-module.exports = { loginController, registerController, dataController };
+const financeController = async (req, res) => {
+  try {
+    const finances = await FinanceRecordModel.find({});
+    if (!finances) {
+      return res.status(404).json({ error: "No records found" });
+    }
+    res.json(finances);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = {
+  loginController,
+  registerController,
+  dataController,
+  financeController,
+};

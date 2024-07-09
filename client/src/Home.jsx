@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 function Home() {
   const location = useLocation(); // Get current location
   const name = location.state?.name; // Get user's name from state
+  const id = location.state?.id; // Get user's id from state
   if (!name) {
     return (
       <>
@@ -21,7 +22,7 @@ function Home() {
   return (
     <>
       <h1 className="heading">Welcome {name}!</h1>
-      <Financialform />
+      <Financialform userID={id} />
       {/* <Financiallist /> */}
     </>
   );

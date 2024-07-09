@@ -24,10 +24,10 @@ function Login() {
       })
       .then((result) => {
         console.log(result);
-        if (result.data === "Success") {
+        if (result.data.message === "Success") {
           const userData = JSON.parse(result.config.data);
           const userEmail = userData.email;
-          console.log(userEmail);
+          const userID = result.data.id;
 
           axios
             .get(
@@ -37,9 +37,8 @@ function Login() {
             )
             .then((response) => {
               const userName = response.data.name;
-              console.log(userName);
               navigate(`/home?name=${encodeURIComponent(userName)}`, {
-                state: { name: userName },
+                state: { name: userName, id: userID },
               });
             })
             .catch((err) => console.log(err));

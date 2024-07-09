@@ -4,6 +4,7 @@ const {
   loginController,
   registerController,
   dataController,
+  financeController,
 } = require("../controllers/UserController");
 
 //router object
@@ -18,5 +19,7 @@ router.post("/register", registerController);
 
 // GET || GET ALL USERS
 router.get("/getUserDetails", dataController);
+
+router.get("/getAllFinanceDetails", financeController);
 
 module.exports = router;
