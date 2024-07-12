@@ -83,4 +83,5 @@ module.exports = {
   registerController,
   dataController,
   financeController,
+  addRecordController
 };

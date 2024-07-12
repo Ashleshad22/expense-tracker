@@ -21,7 +21,16 @@ function Financialform({ userID }) {
     };
 
     //this will add the new record to the database
-    //addRecord(newRecord);
+    addRecord(newRecord);
+
+    axios.post("http://localhost:3001/addFinanceRecord", {
+      userID,
+      date,
+      description,
+      amount,
+      category,
+      paymentMethod,
+    });
 
     setDescription("");
     setAmount("");
