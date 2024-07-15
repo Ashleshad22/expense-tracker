@@ -5,6 +5,10 @@ const FinanceSchema = new mongoose.Schema(
     userID: {
       type: String,
     },
+    date: {
+      type: Date,
+      required: [true, "Date is required"],
+    },
     description: {
       type: String,
       required: [true, "Name is required"],
