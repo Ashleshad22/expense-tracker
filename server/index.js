@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDb = require("./config/connectDB.js");
 const userRoutes = require("./routes/userRoute.js");
+const financeRoutes = require("./routes/financeRoutes");
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ app.use(cors()); // allows cross-origin resource sharing
 connectDb();
 
 app.use("/", userRoutes); // use user routes
+
+app.use("/api/finance", financeRoutes);
 
 const PORT = 3001 || process.env.PORT;
 

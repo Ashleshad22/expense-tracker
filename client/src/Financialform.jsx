@@ -1,45 +1,75 @@
-import React, { useState } from "react";
-import { Form, Button, Container } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Container, Table } from "react-bootstrap";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function Financialform({ userID }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [records, setRecords] = useState([]);
+
+  useEffect(() => {
+    fetchRecords();
+  }, []);
+
+  const fetchRecords = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/api/finance/getFinanceRecords/${userID}`
+      );
+      setRecords(response.data);
+    } catch (error) {
+      console.error("There was an error fetching the records!", error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newRecord = {
       userID: userID,
-      date: new Date(),
+      date: date,
       description: description,
       amount: parseFloat(amount),
       category: category,
       paymentMethod: paymentMethod,
     };
 
-    //this will add the new record to the database
-    // addRecord(newRecord);
-
-    axios.post("http://localhost:3001/addFinanceRecord", {
-      userID,
-      date,
-      description,
-      amount,
-      category,
-      paymentMethod,
-    });
+    axios
+      .post("http://localhost:3001/api/finance/addFinanceRecord", newRecord)
+      .then((response) => {
+        setRecords((prevRecords) => [...prevRecords, newRecord]);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("There was an error adding the record!", error);
+      });
 
     setDescription("");
     setAmount("");
     setCategory("");
     setPaymentMethod("");
+    setDate(new Date());
   };
+
   return (
     <Container>
+      <h3 style={{ color: "#007bff" }}>Add Finance Record</h3>
       <Form style={{ width: "100%" }} onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="formDate">
+          <Form.Label>Date</Form.Label>
+          <br />
+          <DatePicker
+            selected={date}
+            onChange={(date) => setDate(date)}
+            className="form-control mb-3"
+          />
+        </Form.Group>
+
         <Form.Group className="mb-3" controlId="formDescription">
           <Form.Label>Description</Form.Label>
           <Form.Control
@@ -48,6 +78,7 @@ function Financialform({ userID }) {
             required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            className="mb-2"
           />
         </Form.Group>
 
@@ -99,6 +130,32 @@ function Financialform({ userID }) {
           Add Record
         </Button>
       </Form>
+
+      <hr />
+
+      <h3 style={{ color: "#007bff" }}>Finance Records</h3>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Payment Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          {records.map((record, index) => (
+            <tr key={index}>
+              <td>{new Date(record.date).toLocaleDateString()}</td>
+              <td>{record.description}</td>
+              <td>{record.amount}</td>
+              <td>{record.category}</td>
+              <td>{record.paymentMethod}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </Container>
   );
 }
