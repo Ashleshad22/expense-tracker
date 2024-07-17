@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Container, Table } from "react-bootstrap";
+import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import FinancialList from "./FinancialList";  // Import the new component
 
 function Financialform({ userID }) {
   const [description, setDescription] = useState("");
@@ -133,29 +134,7 @@ function Financialform({ userID }) {
 
       <hr />
 
-      <h3 style={{ color: "#007bff" }}>Finance Records</h3>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Payment Method</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((record, index) => (
-            <tr key={index}>
-              <td>{new Date(record.date).toLocaleDateString()}</td>
-              <td>{record.description}</td>
-              <td>{record.amount}</td>
-              <td>{record.category}</td>
-              <td>{record.paymentMethod}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <FinancialList records={records} />  {/* Use the new component */}
     </Container>
   );
 }

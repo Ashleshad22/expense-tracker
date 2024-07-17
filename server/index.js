@@ -8,16 +8,29 @@ const financeRoutes = require("./routes/financeRoutes");
 dotenv.config();
 
 const app = express();
-app.use(express.json()); // parses incoming requests with JSON payloads.......transport backend to frontend json format
-app.use(cors()); // allows cross-origin resource sharing
+app.use(express.json()); // Parses incoming requests with JSON payloads
+app.use(cors()); // Allows cross-origin resource sharing
 
 connectDb();
 
-app.use("/", userRoutes); // use user routes
+app.use("/", userRoutes); // Use user routes
+app.use("/api/finance", financeRoutes); // Use finance routes
 
-app.use("/api/finance", financeRoutes);
+// Error handling middleware for malformed URI and other errors
+app.use((err, req, res, next) => {
+  if (err instanceof URIError) {
+    res.status(400).send('Bad Request: Malformed URI');
+  } else {
+    next(err);
+  }
+});
 
-const PORT = 3001 || process.env.PORT;
+// Catch-all route to handle undefined routes (Not needed in development mode)
+app.use((req, res, next) => {
+  res.status(404).send("API route not found");
+});
+
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

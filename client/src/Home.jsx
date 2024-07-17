@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Financialform from "./Financialform";
-import Financiallist from "./Financiallist";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -23,7 +22,6 @@ function Home() {
     <>
       <h1 className="heading">Welcome {name}!</h1>
       <Financialform userID={id} />
-      {/* <Financiallist /> */}
     </>
   );
 }
