@@ -3,7 +3,7 @@ import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import FinancialList from "./FinancialList";  // Import the new component
+import FinancialList from "./FinancialList"; // Import the new component
 
 function Financialform({ userID }) {
   const [description, setDescription] = useState("");
@@ -104,6 +104,8 @@ function Financialform({ userID }) {
           >
             <option value="">Select a Category</option>
             <option value="Food">Food</option>
+            <option value="Transportation">Transportation</option>
+            <option value="Phone">Phone</option>
             <option value="Rent">Rent</option>
             <option value="Salary">Salary</option>
             <option value="Utilities">Utilities</option>
@@ -121,8 +123,10 @@ function Financialform({ userID }) {
             onChange={(e) => setPaymentMethod(e.target.value)}
           >
             <option value="">Select a Payment Method</option>
-            <option value="Credit Card">Credit Card</option>
+            <option value="UPI">UPI</option>
             <option value="Cash">Cash</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Credit Card">Credit Card</option>
             <option value="Bank Transfer">Bank Transfer</option>
           </Form.Control>
         </Form.Group>
@@ -131,10 +135,9 @@ function Financialform({ userID }) {
           Add Record
         </Button>
       </Form>
-
       <hr />
-
-      <FinancialList records={records} />  {/* Use the new component */}
+      <FinancialList records={records} userID={userID} />{" "}
+      {/* Use the new component */}
     </Container>
   );
 }

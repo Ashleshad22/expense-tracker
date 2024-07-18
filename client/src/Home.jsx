@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Financialform from "./Financialform";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import FinancialList from "./FinancialList";
 
 function Home() {
   const location = useLocation(); // Get current location

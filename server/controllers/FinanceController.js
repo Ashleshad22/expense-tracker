@@ -25,7 +25,7 @@ const getExpensesController = async (req, res) => {
   const { userID } = req.params;
 
   try {
-    const records = await FinanceRecordModel.find({ userID });
+    const records = await FinanceRecordModel.find({ userID }).sort({ date: -1 });
     res.status(200).json(records);
   } catch (error) {
     res.status(400).json({ error: error.message });
