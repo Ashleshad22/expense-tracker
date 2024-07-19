@@ -1,18 +1,23 @@
 import React from "react";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 
 function FinancialList({ records}) {
 
-  let totalSpend = 0;
+  let totalExpense = 0;
   let totalIncome = 0;
 
   records.forEach((record) => {
     if (record.amount < 0) {
-      totalSpend += record.amount;
+      totalExpense += record.amount;
     } else {
       totalIncome += record.amount;
     }
   });
+
+  function deleteUser(id) {
+    const newRecords = records.filter((record) => record._id !== id);
+    setRecords(newRecords);
+  }
 
   return (
     <div style={{ width: "100%" }}>
@@ -25,7 +30,7 @@ function FinancialList({ records}) {
         }}
       >
         <h4>
-          Total Spend: <span style={{ color: "red" }}>₹{totalSpend}</span>
+          Total Expense: <span style={{ color: "red" }}>₹{totalExpense}</span>
         </h4>
         <h4>
           Total Income: <span style={{ color: "green" }}>₹{totalIncome}</span>
@@ -49,6 +54,7 @@ function FinancialList({ records}) {
               <td>{record.amount}</td>
               <td>{record.category}</td>
               <td>{record.paymentMethod}</td>
+              <td><Button className="btn btn-danger">Delete</Button></td>
             </tr>
           ))}
         </tbody>
