@@ -136,8 +136,7 @@ function Financialform({ userID }) {
         </Button>
       </Form>
       <hr />
-      <FinancialList records={records} userID={userID} />{" "}
-      {/* Use the new component */}
+      <FinancialList records={records} setRecords={setRecords}/>
     </Container>
   );
 }

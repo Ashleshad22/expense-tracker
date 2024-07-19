@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Table } from "react-bootstrap";
+import axios from "axios";
+import Swal from "sweetalert2";
 
-function FinancialList({ records}) {
+function FinancialList({ records, setRecords }) {
+  const [loading, setLoading] = useState(false);
 
   let totalExpense = 0;
   let totalIncome = 0;
@@ -14,10 +17,31 @@ function FinancialList({ records}) {
     }
   });
 
-  function deleteUser(id) {
-    const newRecords = records.filter((record) => record._id !== id);
-    setRecords(newRecords);
-  }
+  const deleteUser = async (id) => {
+    setLoading(true);
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      });
+  
+      if (result.isConfirmed) {
+        await axios.delete(`http://localhost:3001/api/trash/deleteFinanceRecord/${id}`);
+        const newRecords = records.filter((record) => record._id !== id);
+        setRecords(newRecords);
+        await Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("There was an error deleting the record!", error);
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={{ width: "100%" }}>
@@ -54,7 +78,15 @@ function FinancialList({ records}) {
               <td>{record.amount}</td>
               <td>{record.category}</td>
               <td>{record.paymentMethod}</td>
-              <td><Button className="btn btn-danger">Delete</Button></td>
+              <td>
+                <Button
+                  className="btn btn-danger"
+                  onClick={() => deleteUser(record._id)}
+                  disabled={loading}
+                >
+                  {loading ? "Deleting..." : "Delete"}
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const connectDb = require("./config/connectDB.js");
 const userRoutes = require("./routes/userRoute.js");
 const financeRoutes = require("./routes/financeRoutes");
+const trashRoutes = require("./routes/trashRoutes");
 
 dotenv.config();
 
@@ -15,20 +16,7 @@ connectDb();
 
 app.use("/", userRoutes); // Use user routes
 app.use("/api/finance", financeRoutes); // Use finance routes
-
-// Error handling middleware for malformed URI and other errors
-app.use((err, req, res, next) => {
-  if (err instanceof URIError) {
-    res.status(400).send('Bad Request: Malformed URI');
-  } else {
-    next(err);
-  }
-});
-
-// Catch-all route to handle undefined routes (Not needed in development mode)
-app.use((req, res, next) => {
-  res.status(404).send("API route not found");
-});
+app.use("/api/trash", trashRoutes);
 
 const PORT = process.env.PORT || 3001;
 
