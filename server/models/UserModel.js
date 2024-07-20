@@ -1,3 +1,5 @@
+//contains user details
+
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(

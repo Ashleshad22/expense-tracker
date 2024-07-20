@@ -1,3 +1,5 @@
+//Deleted records are stored
+
 const mongoose = require("mongoose");
 
 const TrashSchema = new mongoose.Schema(

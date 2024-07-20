@@ -1,3 +1,5 @@
+//main collection of financial records
+
 const mongoose = require("mongoose");
 
 const FinanceSchema = new mongoose.Schema(

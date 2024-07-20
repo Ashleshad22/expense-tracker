@@ -34,7 +34,7 @@ function FinancialList({ records, setRecords }) {
         await axios.delete(`http://localhost:3001/api/trash/deleteFinanceRecord/${id}`);
         const newRecords = records.filter((record) => record._id !== id);
         setRecords(newRecords);
-        await Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        await Swal.fire("Deleted!", "Your transaction has been deleted.", "success");
       }
       setLoading(false);
     } catch (error) {
@@ -68,6 +68,7 @@ function FinancialList({ records, setRecords }) {
             <th>Amount</th>
             <th>Category</th>
             <th>Payment Method</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

@@ -47,36 +47,6 @@ const dataController = async (req, res) => {
   }
 };
 
-// const financeController = async (req, res) => {
-//   const id = req.query.id;
-//   try {
-//     const finances = await FinanceRecordModel.find({ id });
-//     if (!finances) {
-//       return res.status(404).json({ error: "No records found" });
-//     }
-//     res.json(finances);
-//   } catch (err) {
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// };
-
-// const addRecordController = async (req, res) => {
-//   const { id, amount, description, category, paymentMethod } = req.body;
-//   if (!id || !amount || !description || !paymentMethod || !category) {
-//     return res.status(400).json({ error: "Missing required fields" });
-//   }
-//   try {
-//     const newRecord = await FinanceRecordModel.create({
-//       id,
-//       amount,
-//       description,
-//     });
-//     res.json(newRecord);
-//   } catch (err) {
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// };
-
 module.exports = {
   loginController,
   registerController,

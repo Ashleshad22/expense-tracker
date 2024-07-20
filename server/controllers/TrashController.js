@@ -1,10 +1,13 @@
-const express = require("express");
-const router = express.Router();
 const FinanceRecordModel = require("../models/FinanceRecordModel");
 const TrashRecordModel = require("../models/TrashRecordModel");
 
+//move record from main collection to trash
 const deleteExpenseController = async (req, res) => {
+  
   try {
+    //find record using the id of the record
+    //findById - mongoose functionality
+
     const record = await FinanceRecordModel.findById(req.params.id);
     if (!record) {
       return res.status(404).send("Record not found");
