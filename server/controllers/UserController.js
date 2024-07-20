@@ -1,4 +1,5 @@
 const UserModel = require("../models/UserModel.js"); // import the user model
+const Jwt = require("jsonwebtoken");
 
 // login callback
 const loginController = async (req, res) => {
@@ -6,7 +7,17 @@ const loginController = async (req, res) => {
   UserModel.findOne({ email: email }).then((user) => {
     if (user) {
       if (user.password === password) {
-        res.json({ message: "Success", id: user._id });
+        Jwt.sign(
+          { userId: user._id },
+          "exp-track",
+          { expiresIn: "2h" },
+          (err, token) => {
+            if (err) {
+              res.json("Something went wrong");
+            }
+            res.json({ message: "Success", id: user._id, auth: token });
+          }
+        );
       } else {
         res.json("The password is incorrect");
       }
@@ -24,7 +35,23 @@ const registerController = async (req, res) => {
       res.json("User already registered");
     } else {
       UserModel.create(req.body)
-        .then((users) => res.json(users))
+        .then((newUser) => {
+          Jwt.sign(
+            { userId: newUser._id },
+            "exp-track",
+            { expiresIn: "2h" },
+            (err, token) => {
+              if (err) {
+                res.json("Something went wrong");
+              }
+              res.json({
+                message: "User registered successfully",
+                id: newUser._id,
+                auth: token,
+              });
+            }
+          );
+        })
         .catch((err) => res.json(err));
     }
   });

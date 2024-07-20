@@ -6,6 +6,7 @@ const userRoutes = require("./routes/userRoute.js");
 const financeRoutes = require("./routes/financeRoutes");
 const trashRoutes = require("./routes/trashRoutes");
 
+
 dotenv.config();
 
 const app = express();
