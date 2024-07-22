@@ -3,7 +3,7 @@ import { Button, Table } from "react-bootstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-function FinancialList({ records, setRecords }) {
+function FinancialList({ records, setRecords, userID }) {
   const [loading, setLoading] = useState(false);
 
   let totalExpense = 0;
@@ -27,14 +27,15 @@ function FinancialList({ records, setRecords }) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Yes, delete it!",
       });
-  
+
       if (result.isConfirmed) {
-        await axios.delete(`http://localhost:3001/api/trash/deleteFinanceRecord/${id}`);
-        const newRecords = records.filter((record) => record._id !== id);
-        setRecords(newRecords);
-        await Swal.fire("Deleted!", "Your transaction has been deleted.", "success");
+        await axios.delete(
+          `http://localhost:3001/api/trash/deleteFinanceRecord/${id}`
+        );
+        setRecords(prevRecords => prevRecords.filter(record => record._id !== id));
+        await Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
       setLoading(false);
     } catch (error) {

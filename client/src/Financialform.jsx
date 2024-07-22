@@ -136,7 +136,7 @@ function Financialform({ userID }) {
         </Button>
       </Form>
       <hr />
-      <FinancialList records={records} setRecords={setRecords}/>
+      <FinancialList records={records} setRecords={setRecords} userID={userID}/>
     </Container>
   );
 }
