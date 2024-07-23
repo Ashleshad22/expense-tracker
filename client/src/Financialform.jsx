@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import FinancialList from "./FinancialList"; // Import the new component
 
-function Financialform({ userID }) {
+function FinancialForm({ userID }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -43,18 +43,20 @@ function Financialform({ userID }) {
     axios
       .post("http://localhost:3001/api/finance/addFinanceRecord", newRecord)
       .then((response) => {
+        // Update the records state to trigger a re-render
         setRecords((prevRecords) => [...prevRecords, newRecord]);
         console.log(response);
+
+        // Reset form fields after successful submission
+        setDescription("");
+        setAmount("");
+        setCategory("");
+        setPaymentMethod("");
+        setDate(new Date());
       })
       .catch((error) => {
         console.error("There was an error adding the record!", error);
       });
-
-    setDescription("");
-    setAmount("");
-    setCategory("");
-    setPaymentMethod("");
-    setDate(new Date());
   };
 
   return (
@@ -136,9 +138,9 @@ function Financialform({ userID }) {
         </Button>
       </Form>
       <hr />
-      <FinancialList records={records} setRecords={setRecords}/>
+      <FinancialList records={records} setRecords={setRecords} />
     </Container>
   );
 }
 
-export default Financialform;
+export default FinancialForm;

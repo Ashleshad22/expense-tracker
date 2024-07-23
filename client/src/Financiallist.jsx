@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 
 function FinancialList({ records, setRecords }) {
   const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   let totalExpense = 0;
   let totalIncome = 0;
@@ -18,7 +19,13 @@ function FinancialList({ records, setRecords }) {
   });
 
   const deleteUser = async (id) => {
+    if (!id) {
+      console.error("Invalid ID provided for deletion.");
+      return;
+    }
+
     setLoading(true);
+    setDeletingId(id);
     try {
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -27,22 +34,31 @@ function FinancialList({ records, setRecords }) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Yes, delete it!",
       });
-  
+
       if (result.isConfirmed) {
-        await axios.delete(`http://localhost:3001/api/trash/deleteFinanceRecord/${id}`);
-        const newRecords = records.filter((record) => record._id !== id);
-        setRecords(newRecords);
-        await Swal.fire("Deleted!", "Your transaction has been deleted.", "success");
+        await axios.delete(
+          `http://localhost:3001/api/trash/deleteFinanceRecord/${id}`
+        );
+
+        // Update the records state to remove the deleted record
+        setRecords((prevRecords) =>
+          prevRecords.filter((record) => record._id !== id)
+        );
+        await Swal.fire(
+          "Deleted!",
+          "Your transaction has been deleted.",
+          "success"
+        );
       }
-      setLoading(false);
     } catch (error) {
       console.error("There was an error deleting the record!", error);
+    } finally {
       setLoading(false);
+      setDeletingId(null);
     }
   };
-
   return (
     <div style={{ width: "100%" }}>
       <h3 style={{ color: "#007bff", textAlign: "center" }}>Finance Records</h3>
@@ -72,8 +88,8 @@ function FinancialList({ records, setRecords }) {
           </tr>
         </thead>
         <tbody>
-          {records.map((record, index) => (
-            <tr key={index}>
+          {records.map((record) => (
+            <tr key={record._id}>
               <td>{new Date(record.date).toLocaleDateString()}</td>
               <td>{record.description}</td>
               <td>{record.amount}</td>
@@ -83,9 +99,11 @@ function FinancialList({ records, setRecords }) {
                 <Button
                   className="btn btn-danger"
                   onClick={() => deleteUser(record._id)}
-                  disabled={loading}
+                  disabled={loading && deletingId === record._id}
                 >
-                  {loading ? "Deleting..." : "Delete"}
+                  {loading && deletingId === record._id
+                    ? "Deleting..."
+                    : "Delete"}
                 </Button>
               </td>
             </tr>
