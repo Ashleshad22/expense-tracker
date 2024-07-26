@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { FinancialContext } from "./FinancialContext";
 import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 import DatePicker from "react-datepicker";
@@ -11,7 +12,7 @@ function FinancialForm({ userID }) {
   const [category, setCategory] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [date, setDate] = useState(new Date());
-  const [records, setRecords] = useState([]);
+  const { records, setRecords } = useContext(FinancialContext);
 
   useEffect(() => {
     fetchRecords();

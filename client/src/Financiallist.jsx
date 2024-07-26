@@ -59,6 +59,10 @@ function FinancialList({ records, setRecords }) {
       setDeletingId(null);
     }
   };
+
+  // const deleteUser = (id) => {
+  //   console.log(id);
+  // };
   return (
     <div style={{ width: "100%" }}>
       <h3 style={{ color: "#007bff", textAlign: "center" }}>Finance Records</h3>
