@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
-import Financialform from "./Financialform";
+import FinancialForm from "./FinancialForm";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import FinancialList from "./FinancialList";
+import { FinancialProvider } from "./FinancialContext";
 
 function Home() {
   const location = useLocation(); // Get current location
@@ -22,7 +22,9 @@ function Home() {
   return (
     <>
       <h1 className="heading">Welcome {name}!</h1>
-      <Financialform userID={id} />
+      <FinancialProvider>
+        <FinancialForm userID={id} />
+      </FinancialProvider>
     </>
   );
 }

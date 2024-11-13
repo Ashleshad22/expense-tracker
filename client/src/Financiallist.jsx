@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 
 function FinancialList({ records, setRecords, userID }) {
   const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   let totalExpense = 0;
   let totalIncome = 0;
@@ -18,7 +19,13 @@ function FinancialList({ records, setRecords, userID }) {
   });
 
   const deleteUser = async (id) => {
+    if (!id) {
+      console.error("Invalid ID provided for deletion.");
+      return;
+    }
+
     setLoading(true);
+    setDeletingId(id);
     try {
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -34,16 +41,28 @@ function FinancialList({ records, setRecords, userID }) {
         await axios.delete(
           `http://localhost:3001/api/trash/deleteFinanceRecord/${id}`
         );
-        setRecords(prevRecords => prevRecords.filter(record => record._id !== id));
-        await Swal.fire("Deleted!", "Your file has been deleted.", "success");
+
+        // Update the records state to remove the deleted record
+        setRecords((prevRecords) =>
+          prevRecords.filter((record) => record._id !== id)
+        );
+        await Swal.fire(
+          "Deleted!",
+          "Your transaction has been deleted.",
+          "success"
+        );
       }
-      setLoading(false);
     } catch (error) {
       console.error("There was an error deleting the record!", error);
+    } finally {
       setLoading(false);
+      setDeletingId(null);
     }
   };
 
+  // const deleteUser = (id) => {
+  //   console.log(id);
+  // };
   return (
     <div style={{ width: "100%" }}>
       <h3 style={{ color: "#007bff", textAlign: "center" }}>Finance Records</h3>
@@ -73,8 +92,8 @@ function FinancialList({ records, setRecords, userID }) {
           </tr>
         </thead>
         <tbody>
-          {records.map((record, index) => (
-            <tr key={index}>
+          {records.map((record) => (
+            <tr key={record._id}>
               <td>{new Date(record.date).toLocaleDateString()}</td>
               <td>{record.description}</td>
               <td>{record.amount}</td>
@@ -84,9 +103,11 @@ function FinancialList({ records, setRecords, userID }) {
                 <Button
                   className="btn btn-danger"
                   onClick={() => deleteUser(record._id)}
-                  disabled={loading}
+                  disabled={loading && deletingId === record._id}
                 >
-                  {loading ? "Deleting..." : "Delete"}
+                  {loading && deletingId === record._id
+                    ? "Deleting..."
+                    : "Delete"}
                 </Button>
               </td>
             </tr>
